@@ -1,5 +1,6 @@
 import { useBox, useSphere } from '@react-three/cannon';
 import { FC, useCallback, useEffect } from 'react';
+import { Vector3 } from 'three';
 import useGameState from '../state/gameState';
 
 const Bird: FC = () => {
@@ -9,6 +10,7 @@ const Bird: FC = () => {
   const [ref, api] = useSphere(() => ({
     mass: 1,
     position: [0, 3, 0],
+    args: [0.5],
     onCollideBegin: () => {
       console.log('Hit me');
     },
@@ -16,15 +18,14 @@ const Bird: FC = () => {
     angularDamping: 1,
   }));
 
-  console.log(gameStarted);
-
   useEffect(() => {
     const event = (event: KeyboardEvent) => {
       // Spacebar was clicked
       const key = event.key;
       if (key === ' ' || key === 'j') {
         if (gameStarted) {
-          api.applyLocalForce([0, 900, 0], [0, 0, 0]);
+          api.velocity.set(0, 0, 0);
+          api.applyLocalForce([0, 350, 0], [0, 0, 0]);
         } else {
           startGame();
         }
@@ -39,7 +40,11 @@ const Bird: FC = () => {
 
   useEffect(() => {
     if (gameStarted) {
-      api.linearFactor.set(0, 1, 0);
+      api.linearFactor.set(1, 1, 0);
+    } else {
+      api.linearFactor.set(0, 0, 0);
+      api.position.set(0, 3, 0);
+      api.velocity.set(0, 0, 0);
     }
   }, [gameStarted]);
 
@@ -50,7 +55,7 @@ const Bird: FC = () => {
         console.log('Testing');
       }}
     >
-      <sphereGeometry args={[1]} />
+      <sphereGeometry args={[0.5]} />
       <meshStandardMaterial />
     </mesh>
   );

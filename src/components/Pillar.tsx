@@ -8,26 +8,26 @@ export interface PillarProps {
   pillar: Pillar;
 }
 
-const initialPosition: Triplet = [6, -2, 0];
-
 const Pillar: FC<PillarProps> = ({ pillar }) => {
+  const { height } = pillar;
   const removePillar = useGameState((s) => s.removePillar);
 
   const [ref, api] = useBox(() => ({
-    args: [1, 6, 1],
-    position: initialPosition,
+    args: [1, pillar.height, 1],
+    position: [20, pillar.offset, 0],
     onCollideBegin: () => {
       console.log('GG ka');
     },
+    allowSleep: false,
   }));
 
   useFrame((state, delta) => {
     const position = ref.current?.position;
     if (!position) return;
 
-    const newPosition = -0.01 + position.x;
+    const newPosition = -0.05 + position.x;
     ref.current.position.x = newPosition;
-    api.position.set(newPosition, -2, 0);
+    api.position.set(newPosition, pillar.offset, 0);
   });
 
   useEffect(() => {
@@ -40,7 +40,7 @@ const Pillar: FC<PillarProps> = ({ pillar }) => {
 
   return (
     <mesh ref={ref}>
-      <boxGeometry args={[1, 6]} />
+      <boxGeometry args={[1, pillar.height, 1]} />
       <meshStandardMaterial />
     </mesh>
   );

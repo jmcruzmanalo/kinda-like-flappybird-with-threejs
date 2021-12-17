@@ -1,12 +1,14 @@
 import create from 'zustand';
-import Pillar from '../Models/Pillar';
+import Pillar, { calculateOffset } from '../Models/Pillar';
 import { v4 } from 'uuid';
 import produce from 'immer';
 import { devtools } from 'zustand/middleware';
+import getRandomNumber from '../utils/randomNumber';
 
 interface GameState {
   gameStarted: boolean;
   startGame: () => void;
+  endGame: () => void;
 
   pillars: Pillar[];
   addPillar: () => void;
@@ -23,14 +25,27 @@ const useGameState = create<GameState>(
     },
     endGame: () => {
       set((state) => {
-        return { ...state, gameStarted: true };
+        return { ...state, gameStarted: false, pillars: [] };
       });
     },
     pillars: [],
     addPillar: () => {
-      set((state) => {
-        return { ...state, pillars: [...state.pillars, { id: v4() }] };
+      const currentState = get();
+      const height = getRandomNumber(1, 6);
+      const distanceToFloor = calculateOffset(height);
+      const newPillar: Pillar = {
+        id: v4(),
+        height: height,
+        distanceToFloor,
+        offset: getRandomNumber(distanceToFloor * -1, distanceToFloor),
+      };
+
+      console.log(`Height: ${height}`);
+      console.log(`Distance to floor: ${distanceToFloor}`);
+      const newState = produce(currentState, (draft) => {
+        draft.pillars.push(newPillar);
       });
+      set(newState);
     },
     removePillar: (id) => {
       const currentState = get();
@@ -42,9 +57,5 @@ const useGameState = create<GameState>(
     },
   }))
 );
-
-useGameState.subscribe((state) => {
-  console.log('Current state: ', state);
-});
 
 export default useGameState;

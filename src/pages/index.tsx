@@ -11,34 +11,31 @@ import useGameState from '../state/gameState';
 import styles from '../styles/Home.module.css';
 
 const Home: NextPage = () => {
-  const { pillars, addPillar, gameStarted, startGame } = useGameState(
-    ({ pillars, addPillar, gameStarted, startGame }) => {
-      return { pillars, addPillar, gameStarted, startGame };
-    }
-  );
+  const { pillars, addPillar, gameStarted, endGame } = useGameState();
 
   useEffect(() => {
     document.addEventListener('keypress', (event) => {
       // Spacebar was clicked
       const key = event.key;
-      if (key === 'p') {
-        startGame();
+      if (key === 'r') {
+        endGame();
       }
     });
   }, []);
 
   useEffect(() => {
+    let interval: ReturnType<typeof setInterval>;
     if (gameStarted) {
       addPillar();
-      const interval = setInterval(() => {
+      interval = setInterval(() => {
         addPillar();
-      }, 6000);
-
-      return () => {
-        console.log('--Clearing interval--');
-        clearInterval(interval);
-      };
+      }, 2000);
     }
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
   }, [gameStarted]);
 
   return (
