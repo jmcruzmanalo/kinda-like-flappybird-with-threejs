@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import Bird from '../components/Bird';
 import CameraController from '../components/CameraController';
 import Floor from '../components/Floor';
-import GameOverPillar from '../components/GameoverPillar';
+import GameOverPillar from '../components/GameOverPillar';
 import Pillar from '../components/Pillar';
 import useGameState from '../state/gameState';
 import styles from '../styles/Home.module.css';
@@ -53,27 +53,23 @@ const Home: NextPage = () => {
             fov: 75,
             near: 0.1,
             far: 1000,
-            position: [0, 0, 10],
+            position: [0, 0, 20],
           }}
         >
           <CameraController />
           <ambientLight intensity={0.5} castShadow />
-          <spotLight
-            position={[10, 10, 10]}
-            angle={0.15}
-            penumbra={1}
-            castShadow
-          />
-          <pointLight position={[-10, -10, -10]} castShadow />
+
+          <pointLight position={[-10, 10, 0]} intensity={0.3} castShadow />
+          <pointLight position={[10, 10, 0]} intensity={0.3} castShadow />
           <Physics gravity={[0, -20, 0]} allowSleep={false}>
-            <Debug color="black" scale={1}>
-              <GameOverPillar />
-              <Bird />
-              {pillars.map((pillar) => {
-                return <Pillar key={pillar.id} pillar={pillar} />;
-              })}
-              <Floor />
-            </Debug>
+            {/* <Debug color="black" scale={1}> */}
+            <GameOverPillar />
+            <Bird />
+            {pillars.map((pillar) => {
+              return <Pillar key={pillar.id} pillar={pillar} />;
+            })}
+            <Floor />
+            {/* </Debug> */}
           </Physics>
         </Canvas>
       </main>

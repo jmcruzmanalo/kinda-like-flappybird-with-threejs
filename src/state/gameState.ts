@@ -10,6 +10,9 @@ interface GameState {
   startGame: () => void;
   endGame: () => void;
 
+  score: number;
+  incrementScore: () => void;
+
   pillars: Pillar[];
   addPillar: () => void;
   removePillar: (id: string) => void;
@@ -28,6 +31,16 @@ const useGameState = create<GameState>(
         return { ...state, gameStarted: false, pillars: [] };
       });
     },
+
+    score: 0,
+    incrementScore: () => {
+      set((state) => {
+        const newScore = state.score + 1;
+        console.log(`Scored: ${newScore}`);
+        return { ...state, score: newScore };
+      });
+    },
+
     pillars: [],
     addPillar: () => {
       const currentState = get();
@@ -39,9 +52,6 @@ const useGameState = create<GameState>(
         distanceToFloor,
         offset: getRandomNumber(distanceToFloor * -1, distanceToFloor),
       };
-
-      console.log(`Height: ${height}`);
-      console.log(`Distance to floor: ${distanceToFloor}`);
       const newState = produce(currentState, (draft) => {
         draft.pillars.push(newPillar);
       });
