@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import Bird from '../components/Bird';
 import CameraController from '../components/CameraController';
 import Floor from '../components/Floor';
+import GameOverPillar from '../components/GameoverPillar';
 import Pillar from '../components/Pillar';
 import useGameState from '../state/gameState';
 import styles from '../styles/Home.module.css';
@@ -66,6 +67,7 @@ const Home: NextPage = () => {
           <pointLight position={[-10, -10, -10]} castShadow />
           <Physics gravity={[0, -20, 0]} allowSleep={false}>
             <Debug color="black" scale={1}>
+              <GameOverPillar />
               <Bird />
               {pillars.map((pillar) => {
                 return <Pillar key={pillar.id} pillar={pillar} />;

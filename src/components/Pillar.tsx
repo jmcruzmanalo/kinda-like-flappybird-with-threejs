@@ -13,8 +13,8 @@ const Pillar: FC<PillarProps> = ({ pillar }) => {
   const removePillar = useGameState((s) => s.removePillar);
 
   const [ref, api] = useBox(() => ({
-    args: [1, pillar.height, 1],
-    position: [20, pillar.offset, 0],
+    args: [1, pillar.height, 10],
+    position: [40, pillar.offset, 0],
     onCollideBegin: () => {
       console.log('GG ka');
     },
@@ -40,7 +40,7 @@ const Pillar: FC<PillarProps> = ({ pillar }) => {
 
   return (
     <mesh ref={ref}>
-      <boxGeometry args={[1, pillar.height, 1]} />
+      <boxGeometry args={[1, pillar.height, 10]} />
       <meshStandardMaterial />
     </mesh>
   );
