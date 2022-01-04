@@ -3,6 +3,9 @@
 The goal of this project is just to practice using ThreeJS with some Physics. \
 React for state management
 
+## Link
+https://kinda-like-flappybird-with-threejs.vercel.app/
+
 ## Tech
 
 - react - <3
